@@ -15,7 +15,7 @@ export default function CustomAgentConfig() {
     name: '',
     role: '',
     contextKnowledge: '',
-    model: 'genspark-free-1' as AIModel,
+    model: 'gpt-5-mini' as AIModel,
   });
 
   const handleAdd = () => {
@@ -32,7 +32,7 @@ export default function CustomAgentConfig() {
       enabled: true,
     });
     
-    setFormData({ name: '', role: '', contextKnowledge: '', model: 'genspark-free-1' });
+    setFormData({ name: '', role: '', contextKnowledge: '', model: 'gpt-5-mini' });
     setIsAdding(false);
   };
 
@@ -43,7 +43,7 @@ export default function CustomAgentConfig() {
         name: agent.name,
         role: agent.role,
         contextKnowledge: agent.contextKnowledge,
-        model: agent.model || 'genspark-free-1',
+        model: agent.model || 'gpt-5-mini',
       });
       setEditingId(id);
     }
@@ -59,12 +59,12 @@ export default function CustomAgentConfig() {
       model: formData.model,
     });
     
-    setFormData({ name: '', role: '', contextKnowledge: '', model: 'genspark-free-1' });
+    setFormData({ name: '', role: '', contextKnowledge: '', model: 'gpt-5-mini' });
     setEditingId(null);
   };
 
   const handleCancel = () => {
-    setFormData({ name: '', role: '', contextKnowledge: '', model: 'genspark-free-1' });
+    setFormData({ name: '', role: '', contextKnowledge: '', model: 'gpt-5-mini' });
     setIsAdding(false);
     setEditingId(null);
   };

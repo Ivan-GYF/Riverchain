@@ -4,14 +4,15 @@
 
 **Riverchain 智能投资决策系统** 是一个基于 AI 的信贷风控评估系统，采用多智能体评估框架，支持多种 AI 模型（包括免费模型），提供全面、专业的风险分析服务。
 
-## ✨ 最新更新 (v2.0)
+## ✨ 最新更新 (v2.1)
 
+- ✅ **OpenAI 模型集成**: 使用 OpenAI 底层模型原名（gpt-5-mini、gpt-5-nano）
 - ✅ **核心 Prompt 可编辑**: 自定义评估标准和规则
-- ✅ **多模型支持**: Gemini 2.0 Flash、DeepSeek R1、Genspark 免费模型
-- ✅ **免费使用**: 无需 API Key 即可使用 Genspark 免费模型
+- ✅ **多模型支持**: Gemini 2.0 Flash、DeepSeek R1、OpenAI 免费模型
+- ✅ **免费使用**: 无需配置即可使用 gpt-5-mini 和 gpt-5-nano
 - ✅ **灵活配置**: 每个智能体可独立选择模型
 
-查看详细更新: [UPGRADE_NOTES.md](./UPGRADE_NOTES.md)
+查看详细更新: [UPGRADE_NOTES.md](./UPGRADE_NOTES.md) | [OpenAI 集成说明](./OPENAI_INTEGRATION.md)
 
 ## 🎯 核心功能
 
@@ -54,7 +55,7 @@
 - **样式**: Tailwind CSS
 - **状态管理**: Zustand
 - **AI 集成**: 多模型支持
-  - 免费: Genspark Pro、Genspark Lite
+  - 免费: gpt-5-mini、gpt-5-nano (OpenAI)
   - Perplexity: Sonar Pro、Sonar Reasoning
   - Google: Gemini 2.0 Flash
   - DeepSeek: DeepSeek R1
@@ -69,7 +70,7 @@ npm install
 ```
 
 ### 2. 配置 AI 模型 (可选)
-**无需配置即可使用**: 系统默认使用 Genspark 免费模型
+**无需配置即可使用**: 系统默认使用 gpt-5-mini 免费模型
 
 如需使用商业模型:
 1. 点击右上角"设置"按钮
@@ -161,12 +162,35 @@ pm2 start ecosystem.config.cjs
 - **B 级（良好）**: 上市公司、知名企业
 - **C 级（一般）**: 中小企业、非上市公司
 
+## 🤖 可用 AI 模型
+
+### 免费模型（无需 API Key）
+| 模型名称 | 提供商 | 特点 |
+|---------|--------|------|
+| gpt-5-mini | OpenAI (通过 GenSpark) | 轻量级，快速响应，适合日常评估 |
+| gpt-5-nano | OpenAI (通过 GenSpark) | 超轻量级，极速响应，适合快速评估 |
+
+### 商业模型（需要 API Key）
+| 模型名称 | 提供商 | 特点 | API Key 获取 |
+|---------|--------|------|-------------|
+| Sonar Pro | Perplexity | 快速评估，性能稳定 | [获取](https://www.perplexity.ai/settings/api) |
+| Sonar Reasoning | Perplexity | 深度推理，适合复杂案例 | [获取](https://www.perplexity.ai/settings/api) |
+| Gemini 2.0 Flash | Google | 最新模型，速度快，质量高 | [获取](https://makersuite.google.com/app/apikey) |
+| DeepSeek R1 | DeepSeek | 推理模型，深度分析能力强 | [获取](https://platform.deepseek.com/api_keys) |
+
+### 模型选择建议
+- **新手用户**: 使用默认的 gpt-5-mini，无需配置
+- **日常使用**: gpt-5-mini 或 gpt-5-nano，免费快速
+- **复杂案例**: Sonar Reasoning 或 DeepSeek R1，深度分析
+- **高质量要求**: Gemini 2.0 Flash，最新技术
+
 ## 🎨 系统特性
 
 ### 1. 持久化存储
 - API Key 保存在浏览器 LocalStorage
 - 刷新页面不会丢失配置
 - 表单数据使用 Zustand 管理
+- 核心分析师 Prompt 可自定义并保存
 
 ### 2. 响应式设计
 - 支持桌面和移动设备

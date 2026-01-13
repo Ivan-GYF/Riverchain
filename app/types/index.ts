@@ -74,8 +74,8 @@ export type AIModel =
   | 'sonar-reasoning'
   | 'gemini-2.0-flash-exp'
   | 'deepseek-chat'
-  | 'genspark-free-1'
-  | 'genspark-free-2';
+  | 'gpt-5-mini'
+  | 'gpt-5-nano';
 
 // 系统配置
 export interface SystemConfig {
@@ -124,7 +124,7 @@ export interface AIResponse {
 export interface ModelConfig {
   id: AIModel;
   name: string;
-  provider: 'perplexity' | 'google' | 'deepseek' | 'genspark';
+  provider: 'perplexity' | 'google' | 'deepseek' | 'openai';
   requiresApiKey: boolean;
   description: string;
 }

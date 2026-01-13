@@ -44,20 +44,20 @@ export const MODEL_CONFIGS: ModelConfig[] = [
     description: 'DeepSeek 推理模型，深度分析能力强',
   },
   
-  // Genspark 免费模型
+  // OpenAI 免费模型
   {
-    id: 'genspark-free-1',
-    name: 'Genspark Pro (免费)',
-    provider: 'genspark',
+    id: 'gpt-5-mini',
+    name: 'gpt-5-mini (免费)',
+    provider: 'openai',
     requiresApiKey: false,
-    description: 'Genspark 内置免费模型，无需 API Key',
+    description: 'OpenAI 轻量级模型，快速响应，无需 API Key',
   },
   {
-    id: 'genspark-free-2',
-    name: 'Genspark Lite (免费)',
-    provider: 'genspark',
+    id: 'gpt-5-nano',
+    name: 'gpt-5-nano (免费)',
+    provider: 'openai',
     requiresApiKey: false,
-    description: 'Genspark 轻量级免费模型，快速响应',
+    description: 'OpenAI 超轻量级模型，极速响应，无需 API Key',
   },
 ];
 
@@ -66,7 +66,7 @@ const API_ENDPOINTS = {
   perplexity: 'https://api.perplexity.ai/chat/completions',
   google: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent',
   deepseek: 'https://api.deepseek.com/v1/chat/completions',
-  genspark: '/api/genspark-ai', // 内部 API 路由
+  openai: '/api/openai-proxy', // 内部 OpenAI 代理路由
 };
 
 /**
@@ -89,8 +89,8 @@ export function saveApiKey(provider: string, apiKey: string): void {
  * 获取模型配置
  */
 export function getModel(): AIModel {
-  if (typeof window === 'undefined') return 'genspark-free-1';
-  return (localStorage.getItem('ai_model') as AIModel) || 'genspark-free-1';
+  if (typeof window === 'undefined') return 'gpt-5-mini';
+  return (localStorage.getItem('ai_model') as AIModel) || 'gpt-5-mini';
 }
 
 /**
@@ -250,8 +250,8 @@ export async function callAI(
       return callGoogleAPI(messages, model, apiKey);
     case 'deepseek':
       return callDeepSeekAPI(messages, model, apiKey);
-    case 'genspark':
-      return callGensparkAPI(messages, model);
+    case 'openai':
+      return callOpenAIAPI(messages, model);
     default:
       throw new Error(`不支持的 provider: ${modelConfig.provider}`);
   }
@@ -388,14 +388,14 @@ async function callDeepSeekAPI(
 }
 
 /**
- * 调用 Genspark 内置 API (免费)
+ * 调用 OpenAI API (通过内部代理，免费)
  */
-async function callGensparkAPI(
+async function callOpenAIAPI(
   messages: AIMessage[],
   model: AIModel
 ): Promise<string> {
   // 调用内部 API 路由
-  const response = await fetch(API_ENDPOINTS.genspark, {
+  const response = await fetch(API_ENDPOINTS.openai, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -410,7 +410,7 @@ async function callGensparkAPI(
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`Genspark API 失败: ${response.status} - ${errorText}`);
+    throw new Error(`OpenAI API 失败: ${response.status} - ${errorText}`);
   }
 
   const data: AIResponse = await response.json();

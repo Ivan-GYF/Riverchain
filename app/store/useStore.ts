@@ -46,7 +46,7 @@ export const useStore = create<AppState>((set) => ({
   // 初始配置
   config: {
     perplexityApiKey: undefined,
-    model: 'genspark-free-1',
+    model: 'gpt-5-mini',
     coreAnalystPrompt: undefined,
   },
   setConfig: (config) =>
