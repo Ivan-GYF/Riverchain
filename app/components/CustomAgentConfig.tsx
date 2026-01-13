@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useStore } from '@/app/store/useStore';
 import { Plus, Trash2, Edit2, Check, X, Users, ToggleLeft, ToggleRight } from 'lucide-react';
+import { MODEL_CONFIGS } from '@/app/utils/ai';
+import { AIModel } from '@/app/types';
 
 export default function CustomAgentConfig() {
   const { customAgents, addCustomAgent, updateCustomAgent, deleteCustomAgent, toggleCustomAgent } = useStore();
@@ -13,6 +15,7 @@ export default function CustomAgentConfig() {
     name: '',
     role: '',
     contextKnowledge: '',
+    model: 'genspark-free-1' as AIModel,
   });
 
   const handleAdd = () => {
@@ -25,10 +28,11 @@ export default function CustomAgentConfig() {
       name: formData.name,
       role: formData.role,
       contextKnowledge: formData.contextKnowledge,
+      model: formData.model,
       enabled: true,
     });
     
-    setFormData({ name: '', role: '', contextKnowledge: '' });
+    setFormData({ name: '', role: '', contextKnowledge: '', model: 'genspark-free-1' });
     setIsAdding(false);
   };
 
@@ -39,6 +43,7 @@ export default function CustomAgentConfig() {
         name: agent.name,
         role: agent.role,
         contextKnowledge: agent.contextKnowledge,
+        model: agent.model || 'genspark-free-1',
       });
       setEditingId(id);
     }
@@ -51,14 +56,15 @@ export default function CustomAgentConfig() {
       name: formData.name,
       role: formData.role,
       contextKnowledge: formData.contextKnowledge,
+      model: formData.model,
     });
     
-    setFormData({ name: '', role: '', contextKnowledge: '' });
+    setFormData({ name: '', role: '', contextKnowledge: '', model: 'genspark-free-1' });
     setEditingId(null);
   };
 
   const handleCancel = () => {
-    setFormData({ name: '', role: '', contextKnowledge: '' });
+    setFormData({ name: '', role: '', contextKnowledge: '', model: 'genspark-free-1' });
     setIsAdding(false);
     setEditingId(null);
   };
@@ -127,6 +133,41 @@ export default function CustomAgentConfig() {
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
             />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">
+              使用模型
+            </label>
+            <select
+              value={formData.model}
+              onChange={(e) => setFormData({ ...formData, model: e.target.value as AIModel })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+            >
+              <optgroup label="🆓 免费模型">
+                {MODEL_CONFIGS.filter(m => !m.requiresApiKey).map(m => (
+                  <option key={m.id} value={m.id}>{m.name}</option>
+                ))}
+              </optgroup>
+              <optgroup label="Perplexity">
+                {MODEL_CONFIGS.filter(m => m.provider === 'perplexity').map(m => (
+                  <option key={m.id} value={m.id}>{m.name}</option>
+                ))}
+              </optgroup>
+              <optgroup label="Google Gemini">
+                {MODEL_CONFIGS.filter(m => m.provider === 'google').map(m => (
+                  <option key={m.id} value={m.id}>{m.name}</option>
+                ))}
+              </optgroup>
+              <optgroup label="DeepSeek">
+                {MODEL_CONFIGS.filter(m => m.provider === 'deepseek').map(m => (
+                  <option key={m.id} value={m.id}>{m.name}</option>
+                ))}
+              </optgroup>
+            </select>
+            <p className="text-xs text-gray-500">
+              选择该智能体使用的 AI 模型（默认使用免费模型）
+            </p>
           </div>
 
           <div className="flex items-center justify-end gap-2">

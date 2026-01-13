@@ -57,6 +57,7 @@ export interface CustomAgent {
   role: string; // System Prompt
   contextKnowledge: string; // 补充知识库
   enabled: boolean;
+  model?: AIModel; // 智能体使用的模型
 }
 
 // 智能体评估结果
@@ -67,32 +68,43 @@ export interface AgentResult {
   processingTime: number; // 处理时间（毫秒）
 }
 
+// AI 模型类型
+export type AIModel = 
+  | 'sonar-pro' 
+  | 'sonar-reasoning'
+  | 'gemini-2.0-flash-exp'
+  | 'deepseek-chat'
+  | 'genspark-free-1'
+  | 'genspark-free-2';
+
 // 系统配置
 export interface SystemConfig {
-  perplexityApiKey: string;
-  model: 'sonar-pro' | 'sonar-reasoning';
+  perplexityApiKey?: string; // 改为可选
+  model: AIModel;
+  coreAnalystPrompt?: string; // 可自定义的核心分析师 Prompt
 }
 
-// Perplexity API 请求
-export interface PerplexityMessage {
+// AI API 消息格式（通用）
+export interface AIMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
 }
 
-export interface PerplexityRequest {
+// AI API 请求（通用）
+export interface AIRequest {
   model: string;
-  messages: PerplexityMessage[];
+  messages: AIMessage[];
   temperature?: number;
   max_tokens?: number;
-  return_citations?: boolean;
-  return_images?: boolean;
+  [key: string]: any; // 支持各种 API 特定参数
 }
 
-export interface PerplexityResponse {
-  id: string;
-  model: string;
-  object: string;
-  created: number;
+// AI API 响应（通用）
+export interface AIResponse {
+  id?: string;
+  model?: string;
+  object?: string;
+  created?: number;
   choices: Array<{
     index: number;
     message: {
@@ -101,9 +113,18 @@ export interface PerplexityResponse {
     };
     finish_reason: string;
   }>;
-  usage: {
+  usage?: {
     prompt_tokens: number;
     completion_tokens: number;
     total_tokens: number;
   };
+}
+
+// 模型配置信息
+export interface ModelConfig {
+  id: AIModel;
+  name: string;
+  provider: 'perplexity' | 'google' | 'deepseek' | 'genspark';
+  requiresApiKey: boolean;
+  description: string;
 }

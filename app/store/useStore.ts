@@ -45,8 +45,9 @@ interface AppState {
 export const useStore = create<AppState>((set) => ({
   // 初始配置
   config: {
-    perplexityApiKey: '',
-    model: 'sonar-pro',
+    perplexityApiKey: undefined,
+    model: 'genspark-free-1',
+    coreAnalystPrompt: undefined,
   },
   setConfig: (config) =>
     set((state) => ({

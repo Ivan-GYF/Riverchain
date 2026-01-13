@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useStore } from '@/app/store/useStore';
-import { runCoreAnalyst, runCustomAgent, getApiKey } from '@/app/utils/perplexity';
+import { runCoreAnalyst, runCustomAgent, getModel, MODEL_CONFIGS } from '@/app/utils/ai';
 import { Play, Loader2, AlertCircle } from 'lucide-react';
 import { AgentResult } from '@/app/types';
 
@@ -21,11 +21,14 @@ export default function AssessmentEngine() {
   const [error, setError] = useState<string | null>(null);
 
   const handleStartAssessment = async () => {
-    // 验证 API Key
-    const apiKey = getApiKey();
-    if (!apiKey) {
-      alert('请先在设置中配置 Perplexity API Key！');
-      return;
+    // 获取当前模型
+    const currentModel = getModel();
+    const modelConfig = MODEL_CONFIGS.find(m => m.id === currentModel);
+    
+    // 检查是否需要 API Key（免费模型不需要）
+    if (modelConfig?.requiresApiKey) {
+      // 这里可以添加 API Key 检查逻辑
+      // 但由于 AI 工具会自动检查，这里可以省略
     }
 
     // 验证必填字段
@@ -53,7 +56,7 @@ export default function AssessmentEngine() {
       // 运行核心分析师
       const coreStartTime = Date.now();
       try {
-        const coreAssessment = await runCoreAnalyst(request, apiKey);
+        const coreAssessment = await runCoreAnalyst(request);
         const coreEndTime = Date.now();
         
         results.push({
@@ -79,7 +82,7 @@ export default function AssessmentEngine() {
               agent.role,
               request,
               agent.contextKnowledge,
-              apiKey
+              agent.model
             );
             const endTime = Date.now();
             
