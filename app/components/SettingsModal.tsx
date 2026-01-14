@@ -26,7 +26,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     google: '',
     deepseek: '',
   });
-  const [model, setModel] = useState<AIModel>('genspark-free-1');
+  const [model, setModel] = useState<AIModel>('gpt-5-mini');
   const [showKeys, setShowKeys] = useState({
     perplexity: false,
     google: false,
